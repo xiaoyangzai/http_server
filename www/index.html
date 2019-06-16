@@ -1,0 +1,59 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html" />
+<meta name="author" content="blog.anchen8.net" />
+<title>WEB CAMERA</title>
+</head>
+<body>
+<img id="img_test" style="width: 1024px; height: 768px;" width="1024px" height="768px"/>
+<br>
+<input id="msg" type="text">
+<button id="connect" onclick="connect_to_server();">Connect</button>
+<button id="send" onclick="send();">Send</button>
+<button id="close" onclick="close();">Close</button>
+<script>
+var imgtest;
+function connect_to_server(){
+	console.log("connect to server.....\n");
+	var socket;
+	try{
+		socket=new WebSocket('ws://'+document.domain+':8888');
+	}catch(e){
+		console.log("failed to connect to server!!");
+		return;
+	}
+	socket.onopen = sOpen;
+	socket.onerror=sError;
+	var img = document.getElementById("img_test");
+	socket.onmessage= function(msg){
+		URL.revokeObjectURL(img.src);
+		img.src = URL.createObjectURL(msg.data);
+	}
+	socket.onclose=sClose
+}
+function sOpen(){
+	console.log("connect to server successfully!\n");
+}
+function sError(){
+	console.log("server error!!");
+}
+function sMessage(msg){
+	imgtest.src = URL.createObjectURL(msg.data);
+	msg.destroy();
+}
+
+function sClose(){
+	console.log("server has offline!!\n");
+}
+function send(){
+	socket.send('hello ,i am client!')
+}
+function close(){
+	socket.close();
+}
+
+</script>
+
+</body>
+
+</html>
