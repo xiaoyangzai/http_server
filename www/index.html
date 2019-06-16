@@ -7,16 +7,14 @@
 <body>
 <img id="img_test" style="width: 1024px; height: 768px;" width="1024px" height="768px"/>
 <br>
-<input id="msg" type="text">
 <button id="connect" onclick="connect_to_server();">Connect</button>
-<button id="send" onclick="send();">Send</button>
-<button id="close" onclick="close();">Close</button>
 <script>
 var imgtest;
 function connect_to_server(){
 	console.log("connect to server.....\n");
 	var socket;
 	try{
+		//send websocket header
 		socket=new WebSocket('ws://'+document.domain+':8888');
 	}catch(e){
 		console.log("failed to connect to server!!");

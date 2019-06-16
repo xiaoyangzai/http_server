@@ -22,13 +22,13 @@ void do_client(int fd)
 	char method[128];
 	char url[128];
 	char version[128];
-	printf("recv buf: %s\n",buf);
 	sscanf(buf,"%s %s %s\r\n",method,url,version);
 	printf("method: %s\turl: %s\tversion: %s\n",method,url,version);
 	//读取HTTP请求数据包的剩余数据
+	printf("HTTP header: \n%s",buf);
 	while(1)
 	{
-		n = rio_readline(&rio,buf,sizeof(BUFFSIZE));
+		n = rio_readline(&rio,buf,sizeof(buf));
 		if(n < 0)
 			sys_error("read failed");
 		if(n == 0)
@@ -36,6 +36,7 @@ void do_client(int fd)
 			printf("client offline\n");
 			return;
 		}
+		printf("%s",buf);
 		if(strcmp(buf,"\r\n") == 0)
 			break;
 	}
